@@ -1,0 +1,97 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: app_db
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  migration:
+    build: ./services/backend
+    command: >
+      bash -c "python3 wait_for_mysql.py &&
+               python3 manage.py migrate"
+    environment:
+      - DJANGO_SECRET_KEY=local
+      - MYSQL_DATABASE=app_db
+      - MYSQL_PASSWORD=root
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+    volumes:
+      - ./services/backend:/code
+    depends_on:
+      - db
+
+  seed:
+    build: ./services/backend
+    command: >
+      bash -c "python3 wait_for_mysql.py &&
+               python3 manage.py seed"
+    environment:
+      - DJANGO_SECRET_KEY=local
+      - MYSQL_DATABASE=app_db
+      - MYSQL_PASSWORD=root
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+    volumes:
+      - ./services/backend:/code
+    depends_on:
+      - db
+      - migration
+
+  users:
+    build: ./services/backend
+    command: >
+      bash -c "python3 wait_for_mysql.py &&
+               python3 manage.py create_admin"
+    environment:
+      - DJANGO_SECRET_KEY=local
+      - MYSQL_DATABASE=app_db
+      - MYSQL_PASSWORD=root
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - SUPERUSER_EMAIL=admin@admin.com
+      - SUPERUSER_PASS=admin1234
+      - SUPERUSER_USERNAME=admin
+    volumes:
+      - ./services/backend:/code
+    depends_on:
+      - db
+      - migration
+
+  backend:
+    build: ./services/backend
+    environment:
+      - DJANGO_SECRET_KEY=local
+      - MYSQL_DATABASE=app_db
+      - MYSQL_PASSWORD=root
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/backend:/code
+    depends_on:
+      - db
+      - migration
+      - seed
+
+  frontend:
+    build: ./services/frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./services/frontend:/app
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

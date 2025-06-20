@@ -33,11 +33,12 @@ class Common(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        "whitenoise.middleware.WhiteNoiseMiddleware",
     )
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = "backend.urls"
-    SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+    SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "local")
     WSGI_APPLICATION = "backend.wsgi.application"
 
     # Email
@@ -82,7 +83,7 @@ class Common(Configuration):
     )
 
     # Media files
-    MEDIA_ROOT = join(os.path.dirname(BASE_DIR), ".media")
+    MEDIA_ROOT = join(os.path.dirname(BASE_DIR), "media")
     MEDIA_URL = "/media/"
 
     TEMPLATES = [
