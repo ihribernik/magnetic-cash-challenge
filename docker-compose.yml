@@ -82,16 +82,16 @@ services:
       - migration
       - seed
 
-  frontend:
-    build: ./services/frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./services/frontend:/app
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - backend
+  # frontend:
+  #   build: ./services/frontend
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./services/frontend:/app
+  #   environment:
+  #     - NODE_ENV=development
+  #   depends_on:
+  #     - backend
 
 volumes:
   mysql_data:
