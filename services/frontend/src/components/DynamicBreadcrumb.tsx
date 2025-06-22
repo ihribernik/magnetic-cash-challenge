@@ -14,7 +14,6 @@ import React from "react";
 const PATH_LABELS: Record<string, string> = {
   "": "Inicio",
   dashboard: "Dashboard",
-  // Agrega aquí más rutas si lo necesitas
 };
 
 export function DynamicBreadcrumb() {
@@ -32,7 +31,6 @@ export function DynamicBreadcrumb() {
     };
   });
 
-  // Agrega "Inicio" al principio
   const allCrumbs = [
     {
       label: PATH_LABELS[""] || "Inicio",

@@ -48,7 +48,8 @@ services:
     build: ./services/backend
     command: >
       bash -c "python3 wait_for_mysql.py &&
-               python3 manage.py create_admin"
+               python3 manage.py create_admin &&
+               python3 manage.py create_test_user"
     environment:
       - DJANGO_SECRET_KEY=local
       - MYSQL_DATABASE=app_db
@@ -58,6 +59,9 @@ services:
       - SUPERUSER_EMAIL=admin@admin.com
       - SUPERUSER_PASS=admin1234
       - SUPERUSER_USERNAME=admin
+      - USERNAME=ihribernik
+      - EMAIL=ihribernik@notadmin.com
+      - PASS=not-admin-1234
     volumes:
       - ./services/backend:/code
     depends_on:
@@ -73,6 +77,8 @@ services:
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - PORT=8000
+      - DJANGO_SETTINGS_MODULE=backend.config
+      - DJANGO_CONFIGURATION=Local
     ports:
       - "8000:8000"
     volumes:
@@ -90,6 +96,7 @@ services:
   #     - ./services/frontend:/app
   #   environment:
   #     - NODE_ENV=development
+  #     - NEXTAUTH_SECRET='not-admin-1234'
   #   depends_on:
   #     - backend
 

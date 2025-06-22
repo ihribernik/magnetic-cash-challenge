@@ -7,8 +7,8 @@ class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Product
 
-    name = factory.Faker("word")
-    description = factory.Faker("sentence")
+    name = factory.Faker("sentence")
+    description = factory.Faker("paragraph")
     image = factory.django.ImageField(color="blue")
     price = factory.Faker("pydecimal", left_digits=3, right_digits=2, positive=True)
     stock = factory.Faker("pyint", min_value=0, max_value=100)
