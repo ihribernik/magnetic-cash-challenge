@@ -1,3 +1,5 @@
+"use client";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 
 import {
@@ -12,6 +14,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 // This is sample data.
 type NavItem = {
@@ -37,8 +40,12 @@ const data: Data = {
       url: "#",
       items: [
         {
-          title: "List of products",
-          url: "#",
+          title: "Dashboard",
+          url: "/dashboard",
+        },
+        {
+          title: "Cart",
+          url: "/dashboard/cart",
         },
       ],
     },
@@ -46,9 +53,13 @@ const data: Data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+
   return (
     <Sidebar {...props}>
-      <SidebarHeader>.... add title ....</SidebarHeader>
+      <SidebarHeader>
+        <span className="text-lg font-bold">Magnetic Cash Challenge</span>
+      </SidebarHeader>
       <SidebarContent>
         {data.navMain.map((item) => (
           <SidebarGroup key={item.title}>
@@ -57,8 +68,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
+                    <SidebarMenuButton asChild isActive={pathname === item.url}>
+                      <Link href={item.url}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

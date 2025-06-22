@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/dist/client/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -105,12 +106,12 @@ export function LoginForm({
                   <FormItem>
                     <div className="flex items-center">
                       <FormLabel>Contraseña</FormLabel>
-                      <a
-                        href="#"
+                      <Link
+                        href="/auth/forgot-password"
                         className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                       >
                         ¿Olvidaste tu contraseña?
-                      </a>
+                      </Link>
                     </div>
                     <FormControl>
                       <Input
@@ -128,9 +129,12 @@ export function LoginForm({
               </Button>
               <div className="mt-4 text-center text-sm">
                 ¿No tienes una cuenta?{" "}
-                <a href="#" className="underline underline-offset-4">
+                <Link
+                  href="/auth/register"
+                  className="underline underline-offset-4"
+                >
                   Regístrate
-                </a>
+                </Link>
               </div>
             </form>
           </Form>
