@@ -13,7 +13,6 @@ class Command(BaseCommand):
         products = ProductFactory.create_batch(15)
         orders = OrderFactory.create_batch(5)
         for order in orders:
-            # Cada orden tendrá entre 1 y 5 items, usando productos existentes
             for _ in range(randint(1, 5)):
                 OrderItemFactory(order=order, product=choice(products))
         self.stdout.write(self.style.SUCCESS('Seeding completed!'))

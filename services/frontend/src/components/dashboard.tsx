@@ -1,7 +1,7 @@
 "use client";
 import { cartAtom } from "@/atoms/cart";
 import { useAtom } from "jotai";
-import { useState } from "react";
+import Image from "next/image";
 import { toast } from "sonner";
 
 type Product = {
@@ -14,14 +14,11 @@ type Product = {
 };
 
 type DashboardProps = {
-  count: number;
-  next: string | null;
-  previous: string | null;
   results: Product[];
 };
 
-function Dashboard({ count, next, previous, results }: DashboardProps) {
-  const [cart, setCart] = useAtom(cartAtom);
+function Dashboard({ results }: DashboardProps) {
+  const [, setCart] = useAtom(cartAtom);
 
   const addToCart = (product: Product) => {
     setCart((prev) => {
@@ -59,7 +56,7 @@ function Dashboard({ count, next, previous, results }: DashboardProps) {
           <p className="text-gray-700">{product.description}</p>
           <p className="text-green-600">${product.price}</p>
           <p className="text-gray-500">Stock: {product.stock}</p>
-          <img
+          <Image
             src={product.image}
             alt={product.name}
             className="w-full h-auto mt-2"

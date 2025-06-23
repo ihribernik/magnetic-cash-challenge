@@ -20,14 +20,13 @@ export function DynamicBreadcrumb() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
-  // Construye los crumbs
   const crumbs = segments.map((segment, idx) => {
     const href = "/" + segments.slice(0, idx + 1).join("/");
     return {
       label:
         PATH_LABELS[segment] ||
         segment.charAt(0).toUpperCase() + segment.slice(1),
-      href: idx < segments.length - 1 ? href : undefined, // El último no tiene href
+      href: idx < segments.length - 1 ? href : undefined,
     };
   });
 

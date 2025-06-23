@@ -1,32 +1,19 @@
 import Loading from "@/app/dashboard/loading";
 import Dashboard from "@/components/dashboard";
-import { authOptions } from "@/lib/auth";
+import { DJANGO_API_URL } from "@/constants/auth";
+import { authOptions, getValidAccessToken } from "@/lib/auth";
+import { CustomSession } from "@/types/auth";
 import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  price: string;
-  stock: number;
-};
-
-type DashboardProps = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Product[];
-};
-
 export default async function Page() {
-  const session = await getServerSession(authOptions);
-  const jwt = session?.accessToken;
+  const session = (await getServerSession(authOptions)) as CustomSession | null;
 
-  const response = await fetch("http://localhost:8000/api/v1/products/", {
+  const accessToken = await getValidAccessToken(session);
+
+  const response = await fetch(`${DJANGO_API_URL}/api/v1/products/`, {
     headers: {
-      Authorization: `Bearer ${jwt}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
@@ -67,12 +54,30 @@ export default async function Page() {
   return (
     <>
       <Suspense fallback={<Loading />}>
-        <Dashboard
-          count={data.count}
-          next={data.next}
-          previous={data.previous}
-          results={data.results}
-        />
+        <Dashboard results={data.results} />
+        <div className="mt-4 text-center text-sm text-gray-500">
+          <p>
+            Total Products: <strong>{data.count}</strong>
+          </p>
+        </div>
+        <div className="mt-4 text-center text-sm text-gray-500">
+          <p>
+            Page: <strong>{data.page}</strong> of{" "}
+            <strong>{data.total_pages}</strong>
+          </p>
+        </div>
+        <div className="mt-4 text-center text-sm text-gray-500">
+          <p>
+            Next Page:{" "}
+            <strong>{data.next ? "Available" : "No More Pages"}</strong>
+          </p>
+        </div>
+        <div className="mt-4 text-center text-sm text-gray-500">
+          <p>
+            Previous Page:{" "}
+            <strong>{data.previous ? "Available" : "No Previous Page"}</strong>
+          </p>
+        </div>
       </Suspense>
     </>
   );

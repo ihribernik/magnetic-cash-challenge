@@ -41,7 +41,6 @@ services:
     volumes:
       - ./services/backend:/code
     depends_on:
-      - db
       - migration
 
   users:
@@ -65,8 +64,8 @@ services:
     volumes:
       - ./services/backend:/code
     depends_on:
-      - db
       - migration
+      - seed
 
   backend:
     build: ./services/backend
@@ -87,18 +86,19 @@ services:
       - db
       - migration
       - seed
+      - users
 
-  # frontend:
-  #   build: ./services/frontend
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./services/frontend:/app
-  #   environment:
-  #     - NODE_ENV=development
-  #     - NEXTAUTH_SECRET='not-admin-1234'
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: ./services/frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_SECRET=not-admin-1234
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXT_PUBLIC_DJANGO_API_URL=http://backend:8000
+    depends_on:
+      - backend
 
 volumes:
   mysql_data:

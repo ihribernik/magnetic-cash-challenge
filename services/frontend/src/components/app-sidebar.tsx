@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 
-// This is sample data.
 type NavItem = {
   title: string;
   url: string;
@@ -58,7 +57,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <span className="text-lg font-bold">Magnetic Cash Challenge</span>
+        <span className="text-lg font-bold  text-primary ">
+          Magnetic Cash Challenge
+        </span>
       </SidebarHeader>
       <SidebarContent>
         {data.navMain.map((item) => (

@@ -70,9 +70,12 @@ export function H5({ children, className }: PropsWithChildrenAndClassName) {
   );
 }
 
-
 export function P({ children, className }: PropsWithChildrenAndClassName) {
-  return <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>;
+  return (
+    <p className={cn("leading-7 [&:not(:first-child)]:mt-6", className)}>
+      {children}
+    </p>
+  );
 }
 export function Blockquote({
   children,
